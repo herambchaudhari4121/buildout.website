@@ -68,12 +68,12 @@ var/filestorage:
 
 build:
 	# rm -rf local/ bin/
-	docker-compose build --pull zeo # <--no-cache
+	#docker-compose build --pull zeo # <--no-cache
 	make buildout
 
 buildout:
 	# docker-compose run --rm zeo bin/develop checkout .
-	docker-compose run --rm instance bash -c "virtualenv . && bin/pip install -I -r requirements.txt && bin/buildout -c docker-dev.cfg"
+	docker-compose run --rm instance bash -c "virtualenv . && bin/pip install -I -r requirements.txt && bin/buildout -c relstorage.cfg"
 
 upgrade: .env var/instance/minisites
 	docker-compose run --rm instance bin/upgrade-portals
@@ -95,8 +95,8 @@ minisites: .env var/instance/minisites bin/python
 	./bin/python scripts/config.py --minisitesfiles
 
 eggs:  ## Copy eggs from docker image to speed up docker build
-	##-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/imio-website eggs | tar x
-	-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/.buildout eggs | tar x
+	-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/imio-website eggs | tar x
+	##-docker run --entrypoint='' $(IMAGE_NAME) tar -c -C /home/imio/.buildout eggs | tar x
 	mkdir -p eggs
 
 ### Locust testing ###
